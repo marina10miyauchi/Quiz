@@ -3,10 +3,31 @@
     <head>
         <meta charset="utf8">
         <title>QuizGame Title</title>
+        <style>
+        body{
+            background-image: url(asset/background/title.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+
+            text-align: center;
+            padding-top: 50px;
+        }
+        #title{
+            font-size: 65px;
+            color: blue;
+            background-color: rgba(255,255,255,0.5);
+        }
+        #btn-next{
+            widows: 150px;
+            height: 50px;
+        }
+        </style>
+            
     </head>
     <body>
-        <h1>QuizGame</h1>
-
-        <a href="question.html">Start</a>
+        <h1 id="title">QuizGame</h1>
+        <form action="question.html">
+            <button id="btn-next" >Start</button>
+        </form>
     </body>
 </html>
