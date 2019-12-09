@@ -3,40 +3,72 @@
     <head>
         <meta charset="utf8">
         <title>QuizGame Title</title>
-</head>
+        <style>
+            #contents-answer{
+                display: none;
+            }
+        </style>
+    </head>
 <body>
-    <h1>Question</h1>
-    <div id="text_question"></div>
+    <div id="contents-question">
+        <h1>Question</h1>
+            <div id="text_question"></div>
 
     <form action="result.php">
-    <input type="hidden" id="qid" name="qid" value="">
+        <input type="hidden" id="qid" name="qid" value="">
         <input type="text"id="text-answer" name="answer">
+
         <button id="btn-answer">回答</button>
-</form>
+    </form>
+</div>
+
+<div id="contents-answer">
+    <h1>Answer</h1>
+    <div id="text-result"></div>
+</div>
+
 <script>
 fetch("/quiz/api/question.php")
-.then((res)=>{
-    return res.json();})
-.then((json)=>{
-    document.querySelector("#text_question").innerHTML=json["text"];
-    document.querySelector("#qid").value=json["qid"]});
+  .then( (res)=>{
+    return res.json();
+  })
+  .then( (json)=>{
+    document.querySelector("#text_question").innerHTML = json["text"];
+    document.querySelector("#qid").value = json["qid"];
+  });
 
 
     document.querySelector("#btn-answer").addEventListener("click",(e)=>{
     let answer = document.querySelector("#text-answer");
+    e.preventDefault();
 
     if( answer.value ==""){
         alert("入力してください");
         answer.focus();
         answer.style.backgroundColor="Pink";
-        e.preventDefault();
     }
     else{
         document.querySelector("#btn-answer").innerHTML="...送信中...";
+
+        let ans=encodeURIComponent(answer.value);
+        let qid=document.querySelector("#qid").value;
+
+        fetch("/quiz/api/answer.php?answer="+ans+"&qid="+qid)
+        .then((res)=>{
+            return res.json();
+            })
+        .then((json)=>{
+            if(json["result"]){
+                document.querySelector("#text-result").innerHTML="正解";
+            }
+            else{
+                document.querySelector("#text-result").innerHTML="不正解";
+            }
+            document.querySelector("#contents-question").style.display = "none";
+		  	document.querySelector("#contents-answer").style.display = "block";
+        });
     }
-   
     });
     </script>
     </body>
     </html>
-
